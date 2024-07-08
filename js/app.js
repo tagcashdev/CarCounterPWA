@@ -50,6 +50,7 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
+    // Listen for the beforeinstallprompt event
     window.addEventListener('beforeinstallprompt', (e) => {
         e.preventDefault();
         deferredPrompt = e;
