@@ -31,17 +31,6 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 
-    /*
-    counterSection.addEventListener('click', (event) => {
-        if (event.target.tagName === 'BUTTON') {
-            const index = event.target.dataset.index;
-            items[index].count += 1;
-            localStorage.setItem('items', JSON.stringify(items));
-            renderItems();
-        }
-    });
-    */
-
     resetScoresButton.addEventListener('click', () => {
         items = items.map(item => ({ ...item, count: 0 }));
         localStorage.setItem('items', JSON.stringify(items));
@@ -77,10 +66,9 @@ document.addEventListener('DOMContentLoaded', () => {
         counterSection.innerHTML = '';
         items.forEach((item, index) => {
             const itemDiv = document.createElement('div');
-            itemDiv.className = 'flex justify-between items-center bg-white p-2 rounded shadow';
+            itemDiv.className = 'bg-white p-2 rounded shadow';
             itemDiv.innerHTML = `
                 <span>${item.name}: ${item.count}</span>
-                <button data-index="${index}" class="bg-blue-500 text-white p-1 rounded">+</button>
             `;
             counterSection.appendChild(itemDiv);
         });
