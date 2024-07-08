@@ -1,0 +1,16 @@
+body {
+    font-family: Arial, sans-serif;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 20px;
+}
+
+#config-section {
+    margin-bottom: 20px;
+}
+
+#counter-section button {
+    display: block;
+    margin: 10px 0;
+}
