@@ -19,26 +19,6 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 
-    // Fonction pour rendre les éléments de compteur dans le DOM
-    function renderCounters() {
-        counterSection.innerHTML = '';
-        counters.forEach(counter => {
-            const counterDiv = document.createElement('div');
-            counterDiv.className = 'bg-white p-4 rounded-lg shadow-md mb-4';
-            counterDiv.innerHTML = `
-                <p class="text-lg font-bold mb-2">${counter.name} : ${counter.count}</p>
-                <div class="flex items-center">
-                    <button class="bg-green-500 text-white px-4 py-2 rounded mr-2" data-name="${counter.name}" data-action="increment">+</button>
-                    <button class="bg-red-500 text-white px-4 py-2 rounded ml-2" data-name="${counter.name}" data-action="decrement">-</button>
-                </div>
-            `;
-            counterSection.appendChild(counterDiv);
-        });
-    }
-
-    // Initialisation des compteurs
-    renderCounters();
-
     // Gestion des événements de clic sur les boutons + et -
     counterSection.addEventListener('click', (event) => {
         const target = event.target;
@@ -65,13 +45,13 @@ document.addEventListener('DOMContentLoaded', () => {
     resetScoresButton.addEventListener('click', () => {
         items = items.map(item => ({ ...item, count: 0 }));
         localStorage.setItem('items', JSON.stringify(items));
-        renderItems();
+        renderCounters();
     });
 
     deleteItemsButton.addEventListener('click', () => {
         items = [];
         localStorage.removeItem('items');
-        renderItems();
+        renderCounters();
     });
 
     window.addEventListener('beforeinstallprompt', (event) => {
@@ -93,6 +73,23 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     });
 
+    // Fonction pour rendre les éléments de compteur dans le DOM
+    function renderCounters() {
+        counterSection.innerHTML = '';
+        counters.forEach(counter => {
+            const counterDiv = document.createElement('div');
+            counterDiv.className = 'bg-white p-4 rounded-lg shadow-md mb-4';
+            counterDiv.innerHTML = `
+                <p class="text-lg font-bold mb-2">${counter.name} : ${counter.count}</p>
+                <div class="flex items-center">
+                    <button class="bg-green-500 text-white px-4 py-2 rounded mr-2" data-name="${counter.name}" data-action="increment">+</button>
+                    <button class="bg-red-500 text-white px-4 py-2 rounded ml-2" data-name="${counter.name}" data-action="decrement">-</button>
+                </div>
+            `;
+            counterSection.appendChild(counterDiv);
+        });
+    }
+    /*
     function renderItems() {
         counterSection.innerHTML = '';
         items.forEach((item, index) => {
@@ -103,7 +100,7 @@ document.addEventListener('DOMContentLoaded', () => {
             `;
             counterSection.appendChild(itemDiv);
         });
-    }
+    }*/
 
-    renderItems();
+    renderCounters();
 });
