@@ -14,3 +14,11 @@ body {
     display: block;
     margin: 10px 0;
 }
+
+#actions-section {
+    margin-top: 20px;
+}
+
+#actions-section button {
+    margin: 5px;
+}
