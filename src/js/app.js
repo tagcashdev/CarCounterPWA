@@ -19,14 +19,45 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 
+    // Fonction pour rendre les éléments de compteur dans le DOM
+    function renderCounters() {
+        counterSection.innerHTML = '';
+        counters.forEach(counter => {
+            const counterDiv = document.createElement('div');
+            counterDiv.className = 'bg-white p-4 rounded-lg shadow-md mb-4';
+            counterDiv.innerHTML = `
+                <p class="text-lg font-bold mb-2">${counter.name} : ${counter.count}</p>
+                <div class="flex items-center">
+                    <button class="bg-green-500 text-white px-4 py-2 rounded mr-2" data-name="${counter.name}" data-action="increment">+</button>
+                    <button class="bg-red-500 text-white px-4 py-2 rounded ml-2" data-name="${counter.name}" data-action="decrement">-</button>
+                </div>
+            `;
+            counterSection.appendChild(counterDiv);
+        });
+    }
+
+    // Initialisation des compteurs
+    renderCounters();
+
+    // Gestion des événements de clic sur les boutons + et -
     counterSection.addEventListener('click', (event) => {
-        if (event.target.tagName === 'SPAN') {
-            const itemText = event.target.textContent;
-            const itemIndex = items.findIndex(item => item.name === itemText);
-            if (itemIndex !== -1) {
-                items[itemIndex].count += 1;
-                localStorage.setItem('items', JSON.stringify(items));
-                renderItems();
+        const target = event.target;
+        if (target.tagName === 'BUTTON') {
+            const action = target.dataset.action;
+            const counterName = target.dataset.name;
+
+            if (action === 'increment') {
+                const counter = counters.find(counter => counter.name === counterName);
+                if (counter) {
+                    counter.count++;
+                    renderCounters();
+                }
+            } else if (action === 'decrement') {
+                const counter = counters.find(counter => counter.name === counterName);
+                if (counter && counter.count > 0) {
+                    counter.count--;
+                    renderCounters();
+                }
             }
         }
     });
