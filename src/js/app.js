@@ -20,6 +20,19 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     counterSection.addEventListener('click', (event) => {
+        if (event.target.tagName === 'SPAN') {
+            const itemText = event.target.textContent;
+            const itemIndex = items.findIndex(item => item.name === itemText);
+            if (itemIndex !== -1) {
+                items[itemIndex].count += 1;
+                localStorage.setItem('items', JSON.stringify(items));
+                renderItems();
+            }
+        }
+    });
+
+    /*
+    counterSection.addEventListener('click', (event) => {
         if (event.target.tagName === 'BUTTON') {
             const index = event.target.dataset.index;
             items[index].count += 1;
@@ -27,6 +40,7 @@ document.addEventListener('DOMContentLoaded', () => {
             renderItems();
         }
     });
+    */
 
     resetScoresButton.addEventListener('click', () => {
         items = items.map(item => ({ ...item, count: 0 }));

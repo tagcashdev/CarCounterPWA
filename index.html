@@ -14,7 +14,9 @@
         <input type="text" id="item-input" class="border p-2 rounded" placeholder="Enter item">
         <button id="add-item" class="bg-blue-500 text-white p-2 rounded">Add Item</button>
     </div>
-    <div id="counter-section" class="mb-4 space-y-2"></div>
+    <div id="counter-section" class="mb-4 grid grid-cols-1 sm:grid-cols-2 gap-4">
+        <!-- Contenu des éléments ici -->
+    </div>
     <div id="actions-section" class="mb-4 space-x-2">
         <button id="reset-scores" class="bg-yellow-500 text-white p-2 rounded">Reset Scores</button>
         <button id="delete-items" class="bg-red-500 text-white p-2 rounded">Delete Items</button>
@@ -24,7 +26,7 @@
     </div>
     <script>
         if ('serviceWorker' in navigator) {
-            navigator.serviceWorker.register('./service-worker.js');
+            navigator.serviceWorker.register('service-worker.js');
         }
     </script>
 </body>
