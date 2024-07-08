@@ -1,20 +1,16 @@
 {
     "name": "Car Counter App",
     "short_name": "CarCounter",
-    "start_url": "/",
+    "start_url": ".",
     "display": "standalone",
     "background_color": "#ffffff",
-    "theme_color": "#000000",
+    "description": "An app to count car models or colors.",
     "icons": [
-        {
-            "src": "assets/images/icon-192x192.png",
-            "sizes": "192x192",
-            "type": "image/png"
-        },
-        {
-            "src": "assets/images/icon-512x512.png",
-            "sizes": "512x512",
-            "type": "image/png"
-        }
+      {
+        "src": "icon.png",
+        "sizes": "192x192",
+        "type": "image/png"
+      }
     ]
-}
+  }
+  

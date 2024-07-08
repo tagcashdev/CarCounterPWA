@@ -36,24 +36,13 @@ document.addEventListener('DOMContentLoaded', () => {
 
     deleteItemsButton.addEventListener('click', () => {
         items = [];
-        localStorage.setItem('items', JSON.stringify(items));
+        localStorage.removeItem('items');
         renderItems();
     });
 
-    function renderItems() {
-        counterSection.innerHTML = '';
-        items.forEach((item, index) => {
-            const button = document.createElement('button');
-            button.textContent = `${item.name}: ${item.count}`;
-            button.dataset.index = index;
-            counterSection.appendChild(button);
-        });
-    }
-
-    // Listen for the beforeinstallprompt event
-    window.addEventListener('beforeinstallprompt', (e) => {
-        e.preventDefault();
-        deferredPrompt = e;
+    window.addEventListener('beforeinstallprompt', (event) => {
+        event.preventDefault();
+        deferredPrompt = event;
         installAppButton.style.display = 'block';
     });
 
@@ -69,6 +58,19 @@ document.addEventListener('DOMContentLoaded', () => {
             deferredPrompt = null;
         });
     });
+
+    function renderItems() {
+        counterSection.innerHTML = '';
+        items.forEach((item, index) => {
+            const itemDiv = document.createElement('div');
+            itemDiv.className = 'flex justify-between items-center bg-white p-2 rounded shadow';
+            itemDiv.innerHTML = `
+                <span>${item.name}: ${item.count}</span>
+                <button data-index="${index}" class="bg-blue-500 text-white p-1 rounded">+</button>
+            `;
+            counterSection.appendChild(itemDiv);
+        });
+    }
 
     renderItems();
 });
