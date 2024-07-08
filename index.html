@@ -4,23 +4,23 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Car Counter App</title>
-    <link rel="stylesheet" href="css/styles.css">
+    <link rel="stylesheet" href="dist/styles.css">
     <link rel="manifest" href="manifest.json">
-    <script src="js/app.js" defer></script>
+    <script src="src/js/app.js" defer></script>
 </head>
-<body>
-    <h1>Car Counter App</h1>
-    <div id="config-section">
-        <input type="text" id="item-input" placeholder="Enter item">
-        <button id="add-item">Add Item</button>
+<body class="bg-gray-100 flex flex-col items-center p-5">
+    <h1 class="text-2xl font-bold mb-4">Car Counter App</h1>
+    <div id="config-section" class="mb-4 flex space-x-2">
+        <input type="text" id="item-input" class="border p-2 rounded" placeholder="Enter item">
+        <button id="add-item" class="bg-blue-500 text-white p-2 rounded">Add Item</button>
     </div>
-    <div id="counter-section"></div>
-    <div id="actions-section">
-        <button id="reset-scores">Reset Scores</button>
-        <button id="delete-items">Delete Items</button>
+    <div id="counter-section" class="mb-4 space-y-2"></div>
+    <div id="actions-section" class="mb-4 space-x-2">
+        <button id="reset-scores" class="bg-yellow-500 text-white p-2 rounded">Reset Scores</button>
+        <button id="delete-items" class="bg-red-500 text-white p-2 rounded">Delete Items</button>
     </div>
     <div id="install-section">
-        <button id="install-app" style="display:none;">Install App</button>
+        <button id="install-app" class="bg-green-500 text-white p-2 rounded" style="display:none;">Install App</button>
     </div>
     <script>
         if ('serviceWorker' in navigator) {
