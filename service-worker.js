@@ -1,9 +1,9 @@
 const CACHE_NAME = 'car-counter-cache';
 const urlsToCache = [
   '/',
-  '/index.html',
-  '/dist/styles.css',
-  '/src/js/app.js',
+  './index.html',
+  './dist/styles.css',
+  './src/js/app.js',
 ];
 
 self.addEventListener('install', (event) => {
