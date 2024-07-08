@@ -1,21 +1,21 @@
 document.addEventListener('DOMContentLoaded', () => {
-    const itemInput = document.getElementById('item-input');
-    const addItemButton = document.getElementById('add-item');
+    const countersInput = document.getElementById('counters-input');
+    const addCountersButton = document.getElementById('add-counters');
     const counterSection = document.getElementById('counter-section');
     const resetScoresButton = document.getElementById('reset-scores');
-    const deleteItemsButton = document.getElementById('delete-items');
+    const deleteCountersButton = document.getElementById('delete-counters');
     const installAppButton = document.getElementById('install-app');
 
-    let items = JSON.parse(localStorage.getItem('items')) || [];
+    let counters = JSON.parse(localStorage.getItem('counters')) || [];
     let deferredPrompt;
 
-    addItemButton.addEventListener('click', () => {
-        const item = itemInput.value.trim();
-        if (item) {
-            items.push({ name: item, count: 0 });
-            localStorage.setItem('items', JSON.stringify(items));
-            renderItems();
-            itemInput.value = '';
+    addCountersButton.addEventListener('click', () => {
+        const counter = countersInput.value.trim();
+        if (counter) {
+            counters.push({ name: counter, count: 0 });
+            localStorage.setItem('counters', JSON.stringify(counters));
+            renderCounters();
+            countersInput.value = '';
         }
     });
 
@@ -43,14 +43,14 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     resetScoresButton.addEventListener('click', () => {
-        items = items.map(item => ({ ...item, count: 0 }));
-        localStorage.setItem('items', JSON.stringify(items));
+        counters = counters.map(item => ({ ...counter, count: 0 }));
+        localStorage.setItem('counters', JSON.stringify(counters));
         renderCounters();
     });
 
-    deleteItemsButton.addEventListener('click', () => {
-        items = [];
-        localStorage.removeItem('items');
+    deleteCountersButton.addEventListener('click', () => {
+        counters = [];
+        localStorage.removeItem('counters');
         renderCounters();
     });
 
