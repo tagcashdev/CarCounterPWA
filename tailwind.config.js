@@ -8,6 +8,7 @@ module.exports = {
     extend: {
       colors: {
         'tailly': '#f7f6fb',
+        'up': '#ffbb20'
       },
     },
   },
