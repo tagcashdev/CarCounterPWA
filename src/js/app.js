@@ -5,9 +5,12 @@ document.addEventListener('DOMContentLoaded', () => {
     const resetScoresButton = document.getElementById('reset-scores');
     const deleteCountersButton = document.getElementById('delete-counters');
     const installAppButton = document.getElementById('install-app');
+    const configSection = document.getElementById('config-section');
+    const listSection = document.getElementById('list-section');
 
     let counters = JSON.parse(localStorage.getItem('counters')) || [];
     let deferredPrompt;
+    let lists = {};
 
     addCountersButton.addEventListener('click', () => {
         const counter = countersInput.value.trim();
@@ -117,6 +120,67 @@ document.addEventListener('DOMContentLoaded', () => {
             counterSection.appendChild(itemDiv);
         });
     }*/
+    function createNewList() {
+        const listName = document.getElementById('new-list-name').value;
+        if (listName) {
+            lists[listName] = [];
+            displayLists();
+            document.getElementById('new-list-name').value = '';
+        }   
+    }
+
+
+    function addItemToList(listName, item) {
+        if (lists[listName]) {
+            fetch(`/lists/${listName}/items`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ item: item })
+            }).then(response => {
+                if (response.ok) {
+                    lists[listName].push(item);
+                    displayLists();
+                }
+            });
+        }
+    }
+
+    function displayLists() {
+        const listsContainer = document.getElementById('lists-container');
+        listsContainer.innerHTML = '';
+        for (const listName in lists) {
+            const listElement = document.createElement('div');
+            listElement.innerHTML = `<h3>${listName}</h3><ul>${lists[listName].map(item => `<li>${item}</li>`).join('')}</ul>`;
+            listsContainer.appendChild(listElement);
+        }
+    }
+
+    function toggleListSection(){
+        if (listSection.style.display === 'none') {
+            listSection.style.display = 'block';
+            configSection.style.display = 'none';
+        } else {
+            listSection.style.display = 'none';
+            configSection.style.display = 'none';
+        }
+    };
+
+    function toggleConfigSection(){
+        if (configSection.style.display === 'none') {
+            configSection.style.display = 'block';
+            listSection.style.display = 'none';
+        } else {
+            configSection.style.display = 'none';
+            listSection.style.display = 'none';
+        }
+    };
 
     renderCounters();
+
+    window.createNewList = createNewList;
+    window.toggleListSection = toggleListSection;
+    window.toggleConfigSection = toggleConfigSection;
+    //window.addItem = addItem;
 });

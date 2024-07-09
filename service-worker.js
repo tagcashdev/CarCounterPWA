@@ -1,4 +1,4 @@
-const CACHE_NAME = 'car-counter-cache';
+const CACHE_NAME = 'counter-app-cache';
 const urlsToCache = [
   './',
   './index.html',
