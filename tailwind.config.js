@@ -7,7 +7,7 @@ module.exports = {
   theme: {
     extend: {
       colors: {
-        'tailly': '#f7f6fb',
+        'tally': '#f7f6fb',
         'up': '#ffbb20'
       },
     },
