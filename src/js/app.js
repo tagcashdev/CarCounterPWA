@@ -7,68 +7,63 @@ document.addEventListener('DOMContentLoaded', () => {
     const installAppButton = document.getElementById('install-app');
     const configSection = document.getElementById('config-section');
     const listSection = document.getElementById('list-section');
+    const listsContainer = document.getElementById('lists-container');
 
+    let lists = JSON.parse(localStorage.getItem('lists')) || { "Default": [] };
     let counters = JSON.parse(localStorage.getItem('counters')) || [];
-    let deferredPrompt;
-    let lists = {};
+    let selectedList = localStorage.getItem('selectedList') || "Default";
 
+    // Render the lists and counters on page load
+    renderLists();
+    renderCounters();
+
+    // Event listener to add a new counter to the selected list
     addCountersButton.addEventListener('click', () => {
-        const counter = countersInput.value.trim();
-        if (counter) {
-            counters.push({ name: counter, count: 0 });
-            localStorage.setItem('counters', JSON.stringify(counters));
+        const counterName = countersInput.value.trim();
+        if (counterName) {
+            counters.push({ name: counterName, count: 0, list: selectedList });
+            saveToLocalStorage();
             renderCounters();
             countersInput.value = '';
         }
     });
 
-    // Gestion des événements de clic sur les boutons + et -
-    /*
-        if (event.target.tagName === 'SPAN') {
-            const itemText = event.target.textContent;
-            const itemIndex = items.findIndex(item => item.name === itemText);
-            if (itemIndex !== -1) {
-                items[itemIndex].count += 1;
-                localStorage.setItem('items', JSON.stringify(items));
-                renderItems();
-            }
-        }
-    */
+    // Event listener for incrementing or decrementing counters
     counterSection.addEventListener('click', (event) => {
         const target = event.target;
         if (target.tagName === 'BUTTON') {
             const action = target.dataset.action;
             const counterName = target.dataset.name;
-            const counterIndex = counters.findIndex(counter => counter.name === counterName);
+            const counterIndex = counters.findIndex(counter => counter.name === counterName && counter.list === selectedList);
 
-            if (action === 'increment') { 
+            if (action === 'increment') {
                 counters[counterIndex].count += 1;
-            } else if (action === 'decrement') {
-                if (counters[counterIndex].count > 0) {
-                    counters[counterIndex].count -= 1;
-                }
+            } else if (action === 'decrement' && counters[counterIndex].count > 0) {
+                counters[counterIndex].count -= 1;
             }
 
-            localStorage.setItem('counters', JSON.stringify(counters));
+            saveToLocalStorage();
             renderCounters();
         }
     });
 
+    // Event listener to reset scores for all counters in the selected list
     resetScoresButton.addEventListener('click', () => {
-        counters = counters.map(counter => ({ ...counter, count: 0 }));
-        localStorage.setItem('counters', JSON.stringify(counters));
+        counters = counters.map(counter => counter.list === selectedList ? { ...counter, count: 0 } : counter);
+        saveToLocalStorage();
         renderCounters();
     });
 
+    // Event listener to delete all counters in the selected list
     deleteCountersButton.addEventListener('click', () => {
-        counters = [];
-        localStorage.removeItem('counters');
+        counters = counters.filter(counter => counter.list !== selectedList);
+        saveToLocalStorage();
         renderCounters();
     });
 
+    // Install the app
     window.addEventListener('beforeinstallprompt', (event) => {
         event.preventDefault();
-        deferredPrompt = event;
         installAppButton.style.display = 'block';
     });
 
@@ -85,21 +80,71 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     });
 
-    // Fonction pour rendre les éléments de compteur dans le DOM
+    // Toggle display of the list section
+    window.toggleListSection = () => {
+        const displayStyle = listSection.style.display === 'none' ? 'block' : 'none';
+        listSection.style.display = displayStyle;
+        configSection.style.display = 'none';
+    };
+
+    // Toggle display of the config section
+    window.toggleConfigSection = () => {
+        const displayStyle = configSection.style.display === 'none' ? 'block' : 'none';
+        configSection.style.display = displayStyle;
+        listSection.style.display = 'none';
+    };
+
+    // Create a new list
+    window.createNewList = () => {
+        const listName = document.getElementById('new-list-name').value.trim();
+        if (listName && !lists[listName]) {
+            lists[listName] = [];
+            saveToLocalStorage();
+            renderLists();
+            document.getElementById('new-list-name').value = '';
+        }
+    };
+
+    // Select a list
+    window.selectList = (listName) => {
+        selectedList = listName;
+        localStorage.setItem('selectedList', selectedList);
+        renderCounters();
+    };
+
+    // Save lists and counters to local storage
+    function saveToLocalStorage() {
+        localStorage.setItem('lists', JSON.stringify(lists));
+        localStorage.setItem('counters', JSON.stringify(counters));
+    }
+
+    // Render the lists
+    function renderLists() {
+        listsContainer.innerHTML = '';
+        for (const listName in lists) {
+            const listElement = document.createElement('div');
+            listElement.className = 'list-item';
+            listElement.innerText = listName;
+            listElement.addEventListener('click', () => selectList(listName));
+            listsContainer.appendChild(listElement);
+        }
+    }
+
+    // Render counters for the selected list
     function renderCounters() {
-        console.log('renderCounters');
         counterSection.innerHTML = '';
-        counters.forEach(counter => {
+        const listCounters = counters.filter(counter => counter.list === selectedList);
+        listCounters.forEach(counter => {
             const counterDiv = document.createElement('div');
             counterDiv.className = 'bg-white p-4 rounded-lg shadow-md mb-4';
             counterDiv.innerHTML = `
                 <div class="group relative">
                     <div class="flex justify-between flex-wrap">
                         <p class="text-lg font-bold mb-2 w-full">${counter.name} : ${counter.count}</p>
-                            <p class="text-sm font-medium text-gray-900 w-1/2">
-                                <button class="w-full bg-green-500 text-white px-4 py-2 rounded mr-2" data-name="${counter.name}" data-action="increment">+</button>
-                            </p>
-                        <p class="text-sm font-medium text-gray-900  w-1/2">
+                        <p class="text-sm font-medium text-gray-900 w-1/2">
+                            <button class="w-full bg-green-500 text-white px-4 py-2 rounded mr-2" data-name="${counter.name}" data-action="increment">+</button>
+                        </p>
+                        <p class="text-sm font-medium text-gray-900 w-1/2">
                             <button class="w-full bg-red-500 text-white px-4 py-2 rounded ml-2" data-name="${counter.name}" data-action="decrement">-</button>
                         </p>
                     </div>
@@ -108,79 +153,4 @@ document.addEventListener('DOMContentLoaded', () => {
             counterSection.appendChild(counterDiv);
         });
     }
-    /*
-    function renderItems() {
-        counterSection.innerHTML = '';
-        items.forEach((item, index) => {
-            const itemDiv = document.createElement('div');
-            itemDiv.className = 'bg-white p-2 rounded shadow';
-            itemDiv.innerHTML = `
-                <span>${item.name}: ${item.count}</span>
-            `;
-            counterSection.appendChild(itemDiv);
-        });
-    }*/
-    function createNewList() {
-        const listName = document.getElementById('new-list-name').value;
-        if (listName) {
-            lists[listName] = [];
-            displayLists();
-            document.getElementById('new-list-name').value = '';
-        }   
-    }
-
-
-    function addItemToList(listName, item) {
-        if (lists[listName]) {
-            fetch(`/lists/${listName}/items`, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({ item: item })
-            }).then(response => {
-                if (response.ok) {
-                    lists[listName].push(item);
-                    displayLists();
-                }
-            });
-        }
-    }
-
-    function displayLists() {
-        const listsContainer = document.getElementById('lists-container');
-        listsContainer.innerHTML = '';
-        for (const listName in lists) {
-            const listElement = document.createElement('div');
-            listElement.innerHTML = `<h3>${listName}</h3><ul>${lists[listName].map(item => `<li>${item}</li>`).join('')}</ul>`;
-            listsContainer.appendChild(listElement);
-        }
-    }
-
-    function toggleListSection(){
-        if (listSection.style.display === 'none') {
-            listSection.style.display = 'block';
-            configSection.style.display = 'none';
-        } else {
-            listSection.style.display = 'none';
-            configSection.style.display = 'none';
-        }
-    };
-
-    function toggleConfigSection(){
-        if (configSection.style.display === 'none') {
-            configSection.style.display = 'block';
-            listSection.style.display = 'none';
-        } else {
-            configSection.style.display = 'none';
-            listSection.style.display = 'none';
-        }
-    };
-
-    renderCounters();
-
-    window.createNewList = createNewList;
-    window.toggleListSection = toggleListSection;
-    window.toggleConfigSection = toggleConfigSection;
-    //window.addItem = addItem;
 });
