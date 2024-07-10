@@ -1,7 +1,7 @@
 {
     "name": "Tally Up!",
     "short_name": "TuP!",
-    "start_url": "/",
+    "start_url": ".",
     "display": "standalone",
     "background_color": "#f7f6fb",
     "description": "Comptez tout ce qui vous passe par la tête : voitures, collections, bonnes actions, et bien plus encore. Créez autant de compteurs que vous le souhaitez et suivez vos progrès en un coup d'œil.",
