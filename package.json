@@ -1,6 +1,6 @@
 {
-  "name": "carcounterpwa",
-  "version": "1.0.0",
+  "name": "Tally Up!",
+  "version": "1.0.1",
   "description": "",
   "main": "service-worker.js",
   "scripts": {
