@@ -106,8 +106,12 @@ document.addEventListener('DOMContentLoaded', () => {
     };
 
     // Select a list
-    window.selectList = (listName) => {
+    window.selectList = (listName, listElement) => {
         selectedList = listName;
+        document.querySelectorAll('#lists-container a').forEach(element => {
+            element.classList.remove('bg-gray-900', 'text-white');
+        });
+        listElement.classList.add('bg-gray-900', 'text-white');
         localStorage.setItem('selectedList', selectedList);
         renderCounters();
     };
@@ -122,10 +126,13 @@ document.addEventListener('DOMContentLoaded', () => {
     function renderLists() {
         listsContainer.innerHTML = '';
         for (const listName in lists) {
-            const listElement = document.createElement('div');
-            listElement.className = 'list-item';
+            const listElement = document.createElement('a');
+            listElement.className = 'rounded-md px-3 py-2 mb-2 text-sm font-medium text-gray-700 hover:bg-gray-700 hover:text-white mr-2';
             listElement.innerText = listName;
-            listElement.addEventListener('click', () => selectList(listName));
+            if (listName === selectedList) {
+                listElement.classList.add('bg-gray-900', 'text-white');
+            }
+            listElement.addEventListener('click', () => selectList(listName, listElement));
             listsContainer.appendChild(listElement);
         }
     }
