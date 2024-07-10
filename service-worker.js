@@ -1,4 +1,4 @@
-const CACHE_NAME = 'counter-app-cache';
+const CACHE_NAME = 'tally-up-cache';
 const urlsToCache = [
   './',
   './index.html',
