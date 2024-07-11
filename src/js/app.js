@@ -8,6 +8,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const configSection = document.getElementById('config-section');
     const listSection = document.getElementById('list-section');
     const listsContainer = document.getElementById('lists-container');
+    const currentListDisplay = document.getElementById('current-list-name');
 
     let lists = JSON.parse(localStorage.getItem('lists')) || { "Default": [] };
     let counters = JSON.parse(localStorage.getItem('counters')) || [];
@@ -105,39 +106,80 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     };
 
+
+    window.editListName = () => {
+        const newListName = document.getElementById('edit-list-name').value.trim();
+        if (newListName && !lists[newListName]) {
+            lists[newListName] = lists[selectedList];
+            delete lists[selectedList];
+            selectedList = newListName;
+            saveToLocalStorage();
+            renderLists();
+            renderCounters();
+            document.getElementById('edit-list-name').value = '';
+        }
+    };
+
+    window.deleteList = () => {
+        if (selectedList !== "Default") {
+            delete lists[selectedList];
+            selectedList = "Default";
+            saveToLocalStorage();
+            renderLists();
+            renderCounters();
+        } else {
+            alert("Cannot delete the Default list.");
+        }
+    };
+
+    window.deleteCounter = (counterName) => {
+        counters = counters.filter(counter => !(counter.name === counterName && counter.list === selectedList));
+        saveToLocalStorage();
+        renderCounters();
+    };
+
     // Select a list
     window.selectList = (listName, listElement) => {
         selectedList = listName;
         document.querySelectorAll('#lists-container a').forEach(element => {
-            element.classList.remove('bg-gray-900', 'text-white');
+            element.classList.remove('selected-list');
         });
-        listElement.classList.add('bg-gray-900', 'text-white');
+        listElement.classList.add('selected-list');
         localStorage.setItem('selectedList', selectedList);
+        renderLists();
         renderCounters();
+        displayCurrentList();
     };
+
+    // Display the current selected list
+    function displayCurrentList() {
+        currentListDisplay.innerText = `${selectedList}`;
+    }
 
     // Save lists and counters to local storage
     function saveToLocalStorage() {
         localStorage.setItem('lists', JSON.stringify(lists));
         localStorage.setItem('counters', JSON.stringify(counters));
     }
-
+ 
     // Render the lists
     function renderLists() {
         listsContainer.innerHTML = '';
+        displayCurrentList();
         for (const listName in lists) {
             const listElement = document.createElement('a');
-            listElement.className = 'rounded-md px-3 py-2 mb-2 text-sm font-medium text-gray-700 hover:bg-gray-700 hover:text-white mr-2';
+            listElement.className = 'rounded-md px-3 py-2 text-sm font-medium text-gray-300 hover:bg-gray-700 hover:text-white';
             listElement.innerText = listName;
             if (listName === selectedList) {
-                listElement.classList.add('bg-gray-900', 'text-white');
+                listElement.classList.add('selected-list');
             }
             listElement.addEventListener('click', () => selectList(listName, listElement));
             listsContainer.appendChild(listElement);
         }
     }
+    
 
-    // Render counters for the selected list
+    // Ajouter un champ de saisie pour éditer le compteur
     function renderCounters() {
         counterSection.innerHTML = '';
         const listCounters = counters.filter(counter => counter.list === selectedList);
@@ -147,6 +189,7 @@ document.addEventListener('DOMContentLoaded', () => {
             counterDiv.innerHTML = `
                 <div class="group relative">
                     <div class="flex justify-between flex-wrap">
+                        <input type="text" class="edit-counter-name" value="${counter.name}">
                         <p class="text-lg font-bold mb-2 w-full">${counter.name} : ${counter.count}</p>
                         <p class="text-sm font-medium text-gray-900 w-1/2">
                             <button class="w-full bg-green-500 text-white px-4 py-2 rounded mr-2" data-name="${counter.name}" data-action="increment">+</button>
@@ -154,10 +197,26 @@ document.addEventListener('DOMContentLoaded', () => {
                         <p class="text-sm font-medium text-gray-900 w-1/2">
                             <button class="w-full bg-red-500 text-white px-4 py-2 rounded ml-2" data-name="${counter.name}" data-action="decrement">-</button>
                         </p>
+                        <button onclick="editCounterName('${counter.name}')">Edit Counter</button>
+                        <button onclick="deleteCounter('${counter.name}')">Delete Counter</button>
                     </div>
                 </div>
             `;
             counterSection.appendChild(counterDiv);
         });
     }
+
+    window.editCounterName = (oldName) => {
+        const newName = document.querySelector(`.edit-counter-name[value="${oldName}"]`).value.trim();
+        const counterIndex = counters.findIndex(counter => counter.name === oldName && counter.list === selectedList);
+        if (newName && counterIndex > -1) {
+            counters[counterIndex].name = newName;
+            saveToLocalStorage();
+            renderCounters();
+        }
+    };
+
+
+    // Initial display of the current list
+    displayCurrentList();
 });

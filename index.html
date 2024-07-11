@@ -60,18 +60,26 @@
         <div id="config-section" class="mb-4 flex space-x-2" style="display: none;">
             <input type="text" id="counters-input" class="border p-2 rounded" placeholder="Nom du compteur">
             <button id="add-counters" class="bg-blue-500 text-white p-2 rounded">Ajouter</button>
+
+            <!--
+            <input type="text" id="edit-list-name" placeholder="Edit List Name">
+            <button onclick="editListName()">Sauvegarder</button>
+            -->
+
+            <button onclick="deleteList()" class="bg-red-500 text-white p-2 rounded">Supprimer la liste</button>
+            <button id="delete-counters" class="bg-red-500 text-white p-2 rounded">Supprimer tout les compteurs</button>
         </div>
+        <h1 class="text-1xl font-bold tracking-tight sm:text-2xl" id="current-list-name">Default</h1>
         <div id="counter-section" class="gap-x-4 grid grid-cols-2 mt-6"></div>
         <div id="actions-section" class="mb-4 space-x-2">
-            <button id="reset-scores" class="bg-yellow-500 text-white p-2 rounded">Reset Scores</button>
-            <button id="delete-counters" class="bg-red-500 text-white p-2 rounded">Delete Counters</button>
+            <button id="reset-scores" class="bg-yellow-500 text-white p-2 rounded">Remetre le score à 0</button>
         </div>
         <div id="install-section">
             <button id="install-app" class="bg-green-500 text-white p-2 rounded" style="display:none;">Install App</button>
         </div>
         <script>
             if ('serviceWorker' in navigator) {
-            navigator.serviceWorker.register('./service-worker.js')
+                navigator.serviceWorker.register('./service-worker.js')
                 .then(registration => {
                     console.log('Service Worker registered with scope:', registration.scope);
                 })
