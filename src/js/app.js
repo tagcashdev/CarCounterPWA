@@ -241,6 +241,5 @@ document.addEventListener('DOMContentLoaded', () => {
     };
 
 
-    // Initial display of the current list
     displayCurrentList();
 });
