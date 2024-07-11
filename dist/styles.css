@@ -554,12 +554,20 @@ video {
   --tw-contain-style:  ;
 }
 
+.fixed {
+  position: fixed;
+}
+
 .absolute {
   position: absolute;
 }
 
 .relative {
   position: relative;
+}
+
+.sticky {
+  position: sticky;
 }
 
 .inset-y-0 {
@@ -573,6 +581,10 @@ video {
 
 .right-0 {
   right: 0px;
+}
+
+.top-\[100vh\] {
+  top: 100vh;
 }
 
 .mx-auto {
@@ -622,6 +634,14 @@ video {
 
 .h-6 {
   height: 1.5rem;
+}
+
+.h-screen {
+  height: 100vh;
+}
+
+.min-h-screen {
+  min-height: 100vh;
 }
 
 .w-1\/2 {
