@@ -185,21 +185,25 @@ document.addEventListener('DOMContentLoaded', () => {
         const listCounters = counters.filter(counter => counter.list === selectedList);
         listCounters.forEach(counter => {
             const counterDiv = document.createElement('div');
-            counterDiv.className = 'bg-white p-4 rounded-lg shadow-md mb-4';
+            counterDiv.className = 'bg-white mb-4 overflow-hidden';
             counterDiv.innerHTML = `
-                <div class="group relative">
+                <div class="group relative sm:p-4 p-2 ">
                     <div class="flex justify-between flex-wrap">
-                        <input type="text" class="edit-counter-name" value="${counter.name}">
-                        <p class="text-lg font-bold mb-2 w-full">${counter.name} : ${counter.count}</p>
-                        <p class="text-sm font-medium text-gray-900 w-1/2">
-                            <button class="w-full bg-green-500 text-white px-4 py-2 rounded mr-2" data-name="${counter.name}" data-action="increment">+</button>
-                        </p>
-                        <p class="text-sm font-medium text-gray-900 w-1/2">
-                            <button class="w-full bg-red-500 text-white px-4 py-2 rounded ml-2" data-name="${counter.name}" data-action="decrement">-</button>
-                        </p>
+                        <div class="block w-full font-bold mb-2">
+                            <input type="text" class="edit-counter-name text-lg text-center rounded-md w-full border-0 py-1.5 pl-2 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6" readonly value="${counter.name}">
+                            <div class="!text-center text-3xl w-full">${counter.count}</div>
+                        </div>
                         <button onclick="editCounterName('${counter.name}')">Edit Counter</button>
                         <button onclick="deleteCounter('${counter.name}')">Delete Counter</button>
                     </div>
+                </div>
+                <div class="grid grid-cols-2">
+                    <p class="text-sm font-medium text-gray-900">
+                        <button class="w-full bg-green-500 text-white px-4 py-2" data-name="${counter.name}" data-action="increment">+</button>
+                    </p>
+                    <p class="text-sm font-medium text-gray-900">
+                        <button class="w-full bg-red-500 text-white px-4 py-2" data-name="${counter.name}" data-action="decrement">-</button>
+                    </p>
                 </div>
             `;
             counterSection.appendChild(counterDiv);
